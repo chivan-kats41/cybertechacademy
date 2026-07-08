@@ -1,0 +1,7 @@
+Payment Confirmed — {{ item_name }}
+
+Hi {{ user.first_name }},
+Amount: {{ currency }} {{ amount }}
+Reference: {{ payment.payment_reference }}
+
+Contact: {{ contact_email }}

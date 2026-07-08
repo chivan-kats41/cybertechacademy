@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<!-- ── HERO ──────────────────────────────────────────── -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Animated grid background -->
+  <div class="absolute inset-0" style="background-image:linear-gradient(rgba(0,245,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,0.04) 1px,transparent 1px);background-size:60px 60px;"></div>
+  <!-- Radial glow -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-20" style="background:radial-gradient(circle,#00F5FF 0%,transparent 70%);"></div>
+
+  <div class="relative max-w-5xl mx-auto px-4 text-center py-24 fade-in">
+    <div class="inline-flex items-center gap-2 badge-cyan px-4 py-2 rounded-full text-sm mb-6">
+      <i class="fas fa-bolt text-yellow-400"></i> Uganda's #1 Tech Academy
+    </div>
+    <h1 class="font-display text-5xl md:text-7xl font-black text-white leading-tight mb-6">
+      Empowering the<br />
+      <span class="text-cyan neon-text">Next Generation</span><br />
+      of Tech Innovators
+    </h1>
+    <p class="text-cyber-muted text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+      Master cybersecurity, web development, networking & AI through expert-led online courses and live Zoom sessions.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/register/" class="btn-primary px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2">
+        <i class="fas fa-rocket"></i> Start Learning Free
+      </a>
+      <a href="/courses/" class="btn-outline px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2">
+        <i class="fas fa-book-open"></i> Browse Courses
+      </a>
+    </div>
+    <!-- Social proof -->
+    <div class="flex items-center justify-center gap-8 mt-12 text-center">
+      <div><p class="text-white font-bold text-2xl font-display">500+</p><p class="text-cyber-muted text-xs">Students</p></div>
+      <div class="w-px h-8 bg-cyber-border"></div>
+      <div><p class="text-white font-bold text-2xl font-display">20+</p><p class="text-cyber-muted text-xs">Courses</p></div>
+      <div class="w-px h-8 bg-cyber-border"></div>
+      <div><p class="text-white font-bold text-2xl font-display">98%</p><p class="text-cyber-muted text-xs">Satisfaction</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ──────────────────────────────────── -->
+{% if categories %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="text-center mb-10 fade-in">
+    <h2 class="font-display text-3xl font-bold text-white mb-2">Explore <span class="text-cyan">Categories</span></h2>
+    <p class="text-cyber-muted">Find the right tech track for your goals</p>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+    {% for cat in categories %}
+    <a href="/courses/?cat={{ cat.slug }}" class="glass-card rounded-xl p-4 text-center hover:-translate-y-1 transition-transform fade-in">
+      <i class="{{ cat.icon|default:'fas fa-code' }} text-cyan-400 text-2xl mb-2 block"></i>
+      <p class="text-white text-sm font-medium">{{ cat.name }}</p>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- ── FEATURED COURSES ────────────────────────────── -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="flex items-center justify-between mb-10 fade-in">
+    <div>
+      <h2 class="font-display text-3xl font-bold text-white mb-1">Featured <span class="text-cyan">Courses</span></h2>
+      <p class="text-cyber-muted text-sm">Hand-picked by our instructors</p>
+    </div>
+    <a href="/courses/" class="btn-outline px-4 py-2 rounded-lg text-sm font-semibold hidden sm:flex items-center gap-1">
+      All Courses <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+  </div>
+
+  {% if featured_courses %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for course in featured_courses %}
+    <div class="glass-card rounded-2xl overflow-hidden fade-in hover:-translate-y-1 transition-transform duration-300">
+      <div class="h-40 bg-cyber-surface relative overflow-hidden">
+        {% if course.thumbnail %}
+          <img src="{{ course.thumbnail.url }}" class="w-full h-full object-cover" />
+        {% else %}
+          <div class="w-full h-full flex items-center justify-center">
+            <i class="fas fa-laptop-code text-cyan-400/30 text-5xl"></i>
+          </div>
+        {% endif %}
+        {% if course.is_free %}<span class="absolute top-3 left-3 badge-green px-2.5 py-1 rounded-full text-xs font-bold">FREE</span>{% endif %}
+      </div>
+      <div class="p-5">
+        <p class="text-cyan-400/70 text-xs uppercase tracking-wider mb-1">{{ course.category.name|default:"Course" }}</p>
+        <h3 class="text-white font-semibold mb-2 leading-snug">{{ course.title }}</h3>
+        <p class="text-cyber-muted text-sm line-clamp-2 mb-4">{{ course.description|truncatewords:14 }}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-white font-bold">{% if course.is_free %}Free{% else %}UGX {{ course.price|floatformat:0 }}{% endif %}</span>
+          <a href="/courses/{{ course.slug }}/" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">View →</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-12 fade-in">
+    <p class="text-cyber-muted">Courses coming soon. <a href="/contact/" class="text-cyan-400 hover:underline">Contact us</a> to learn more.</p>
+  </div>
+  {% endif %}
+</section>
+
+<!-- ── UPCOMING ZOOM SESSIONS ──────────────────────── -->
+{% if upcoming_sessions %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="flex items-center justify-between mb-10 fade-in">
+    <div>
+      <h2 class="font-display text-3xl font-bold text-white mb-1">Upcoming <span class="text-cyan">Live Sessions</span></h2>
+      <p class="text-cyber-muted text-sm">Book your spot before they fill up</p>
+    </div>
+    <a href="/sessions/" class="btn-outline px-4 py-2 rounded-lg text-sm font-semibold hidden sm:flex items-center gap-1">
+      All Sessions <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for session in upcoming_sessions %}
+    <div class="glass-card rounded-2xl p-6 fade-in hover:-translate-y-1 transition-transform">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-purple-400/10 rounded-xl flex items-center justify-center flex-shrink-0">
+          <i class="fas fa-video text-purple-400 text-lg"></i>
+        </div>
+        <div class="min-w-0">
+          <h3 class="text-white font-semibold text-sm mb-1 leading-snug">{{ session.title }}</h3>
+          <p class="text-cyber-muted text-xs">{{ session.scheduled_at|date:"d M Y · H:i" }} EAT</p>
+          <p class="text-white font-bold mt-2 text-sm">UGX {{ session.price|floatformat:0 }}</p>
+          <a href="/sessions/{{ session.pk }}/" class="text-cyan-400 text-xs hover:underline mt-1 inline-block">View & Book →</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- ── WHY CYBERTECH ────────────────────────────────── -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="text-center mb-10 fade-in">
+    <h2 class="font-display text-3xl font-bold text-white mb-2">Why <span class="text-cyan">CyberTech Academy?</span></h2>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for feature in features %}
+    <div class="glass-card rounded-xl p-6 text-center fade-in">
+      <div class="w-12 h-12 {{ feature.bg }} rounded-xl flex items-center justify-center mx-auto mb-4">
+        <i class="{{ feature.icon }} {{ feature.color }} text-xl"></i>
+      </div>
+      <h3 class="text-white font-semibold mb-2">{{ feature.title }}</h3>
+      <p class="text-cyber-muted text-sm">{{ feature.desc }}</p>
+    </div>
+    {% empty %}
+    {% for item in "1234" %}
+    <div class="glass-card rounded-xl p-6 text-center fade-in">
+      {% if forloop.counter == 1 %}
+        <div class="w-12 h-12 bg-cyan-400/10 rounded-xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-chalkboard-teacher text-cyan-400 text-xl"></i></div>
+        <h3 class="text-white font-semibold mb-2">Expert Instructors</h3>
+        <p class="text-cyber-muted text-sm">Learn from industry professionals with real-world experience.</p>
+      {% elif forloop.counter == 2 %}
+        <div class="w-12 h-12 bg-green-400/10 rounded-xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-video text-green-400 text-xl"></i></div>
+        <h3 class="text-white font-semibold mb-2">Live Zoom Sessions</h3>
+        <p class="text-cyber-muted text-sm">Interactive live classes with Q&A and direct instructor access.</p>
+      {% elif forloop.counter == 3 %}
+        <div class="w-12 h-12 bg-purple-400/10 rounded-xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-infinity text-purple-400 text-xl"></i></div>
+        <h3 class="text-white font-semibold mb-2">Lifetime Access</h3>
+        <p class="text-cyber-muted text-sm">Enroll once, learn forever. Revisit content anytime.</p>
+      {% else %}
+        <div class="w-12 h-12 bg-orange-400/10 rounded-xl flex items-center justify-center mx-auto mb-4"><i class="fas fa-certificate text-orange-400 text-xl"></i></div>
+        <h3 class="text-white font-semibold mb-2">Certificates</h3>
+        <p class="text-cyber-muted text-sm">Earn industry-recognized certificates upon course completion.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── CTA BANNER ──────────────────────────────────── -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+  <div class="glass-card rounded-2xl p-10 text-center fade-in" style="background:linear-gradient(135deg,rgba(0,245,255,0.07),rgba(57,255,20,0.04));">
+    <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+      Ready to Start Your <span class="text-cyan">Tech Journey?</span>
+    </h2>
+    <p class="text-cyber-muted max-w-xl mx-auto mb-8">Join hundreds of Ugandan students mastering in-demand tech skills.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/register/" class="btn-primary px-8 py-4 rounded-xl text-base font-bold flex items-center gap-2">
+        <i class="fas fa-rocket"></i> Register for Free
+      </a>
+      <a href="tel:+256705221604" class="btn-outline px-8 py-4 rounded-xl text-base font-semibold flex items-center gap-2">
+        <i class="fas fa-phone"></i> Call +256 705 221 604
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+# Environment
+.env
+env/
+venv/
+
+# Database
+db.sqlite3
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Media (usually not committed, user uploads)
+media/
+
+# Static (collected files, usually not committed)
+staticfiles/
+
+# IDE
+.vscode/
+.idea/

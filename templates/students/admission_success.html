@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Admission Complete — Welcome!{% endblock %}
+{% block content %}
+<section class="min-h-screen flex items-center justify-center px-4 py-20">
+  <div class="max-w-lg w-full text-center fade-in">
+
+    <!-- Success Animation -->
+    <div class="relative inline-flex mb-8">
+      <div class="w-28 h-28 rounded-full bg-green-400/10 border-2 border-green-400/40 flex items-center justify-center">
+        <i class="fas fa-check text-green-400 text-5xl"></i>
+      </div>
+      <!-- Ripple rings -->
+      <div class="absolute inset-0 rounded-full border border-green-400/20 animate-ping"></div>
+    </div>
+
+    <div class="inline-flex items-center gap-2 badge-green px-4 py-1.5 rounded-full text-sm mb-4">
+      <i class="fas fa-circle-check"></i> Admission Complete
+    </div>
+
+    <h1 class="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+      Welcome to <span class="text-cyan neon-text">CyberTech Academy!</span>
+    </h1>
+    <p class="text-cyber-muted max-w-md mx-auto mb-8 leading-relaxed">
+      Your admission fee has been received and your account is now fully activated.
+      Check your email for a confirmation receipt.
+    </p>
+
+    <div class="glass-card rounded-2xl p-6 mb-8 text-left">
+      <h3 class="text-white font-semibold mb-4 flex items-center gap-2">
+        <i class="fas fa-rocket text-cyan-400"></i> You're all set! Here's what to do next:
+      </h3>
+      <ul class="space-y-3">
+        <li class="flex items-center gap-3 text-sm text-cyber-muted">
+          <i class="fas fa-sign-in-alt text-cyan-400 w-5 text-center"></i>
+          <span>Login with your email and password</span>
+        </li>
+        <li class="flex items-center gap-3 text-sm text-cyber-muted">
+          <i class="fas fa-book-open text-cyan-400 w-5 text-center"></i>
+          <span>Browse and enroll in your first course</span>
+        </li>
+        <li class="flex items-center gap-3 text-sm text-cyber-muted">
+          <i class="fas fa-video text-cyan-400 w-5 text-center"></i>
+          <span>Book a live Zoom session with an instructor</span>
+        </li>
+        <li class="flex items-center gap-3 text-sm text-cyber-muted">
+          <i class="fas fa-chart-line text-cyan-400 w-5 text-center"></i>
+          <span>Track your progress from your dashboard</span>
+        </li>
+      </ul>
+    </div>
+
+    <a href="/accounts/login/"
+      class="btn-primary px-8 py-4 rounded-xl font-bold text-base inline-flex items-center gap-2 mb-4">
+      <i class="fas fa-sign-in-alt"></i> Login to My Account
+    </a>
+    <br />
+    <a href="/courses/" class="text-cyan-400 text-sm hover:underline inline-flex items-center gap-1">
+      <i class="fas fa-book text-xs"></i> Browse Courses First
+    </a>
+
+    <p class="text-cyber-muted text-xs mt-8">
+      Questions? <a href="tel:+256705221604" class="text-cyan-400 hover:underline">+256 705 221 604</a>
+      · <a href="mailto:chivankats@gmail.com" class="text-cyan-400 hover:underline">chivankats@gmail.com</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

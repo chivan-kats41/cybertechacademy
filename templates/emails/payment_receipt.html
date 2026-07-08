@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body { background:#0A0E1A; color:#fff; font-family:Inter,sans-serif; }
+    .container { max-width:600px; margin:0 auto; padding:40px 20px; }
+    .card { background:#0F1628; border:1px solid rgba(0,245,255,0.2); border-radius:16px; padding:40px; }
+    .cyan { color:#00F5FF; }
+    .muted { color:#8892A4; font-size:14px; }
+    .divider { border:none; border-top:1px solid rgba(0,245,255,0.1); margin:24px 0; }
+    .row { display:flex; justify-content:space-between; padding:8px 0; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div style="font-size:22px;font-weight:900;letter-spacing:2px;margin-bottom:8px;">Cyber<span class="cyan">Tech</span> Academy</div>
+      <h2>✅ Payment Confirmed</h2>
+      <p class="muted">Hi {{ user.first_name }}, your payment was successful.</p>
+      <hr class="divider" />
+      <div class="row"><span class="muted">Item</span><strong>{{ item_name }}</strong></div>
+      <div class="row"><span class="muted">Amount</span><strong class="cyan">{{ currency }} {{ amount }}</strong></div>
+      <div class="row"><span class="muted">Reference</span><code style="font-size:12px;">{{ payment.payment_reference }}</code></div>
+      <hr class="divider" />
+      <p class="muted">Need help? Contact us at {{ contact_email }}</p>
+    </div>
+  </div>
+</body>
+</html>
+
+

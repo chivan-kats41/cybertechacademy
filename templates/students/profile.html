@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+{% block content %}
+<section class="max-w-3xl mx-auto px-4 sm:px-6 py-12">
+  <div class="mb-8 fade-in">
+    <a href="/dashboard/" class="text-cyan-400 text-xs hover:underline flex items-center gap-1 mb-4">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+    <h1 class="font-display text-2xl font-bold text-white">My <span class="text-cyan">Profile</span></h1>
+  </div>
+
+  <div class="grid gap-6">
+    <!-- Account Info -->
+    <div class="glass-card rounded-2xl p-7 fade-in">
+      <div class="flex items-center gap-5 mb-6">
+        <div class="w-16 h-16 rounded-full bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center flex-shrink-0">
+          {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" class="w-16 h-16 rounded-full object-cover" />
+          {% else %}
+            <i class="fas fa-user text-cyan-400 text-2xl"></i>
+          {% endif %}
+        </div>
+        <div>
+          <h2 class="text-white font-bold text-lg">{{ user.get_full_name }}</h2>
+          <p class="text-cyber-muted text-sm">{{ user.email }}</p>
+          <span class="badge-cyan px-2.5 py-0.5 rounded-full text-xs mt-1 inline-block capitalize">{{ user.role }}</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-cyber-border pt-5">
+        <div>
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Phone</p>
+          <p class="text-white text-sm">{{ user.phone|default:"Not set" }}</p>
+        </div>
+        <div>
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Country</p>
+          <p class="text-white text-sm">{{ user.country|default:"Not set" }}</p>
+        </div>
+        <div>
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Member Since</p>
+          <p class="text-white text-sm">{{ user.date_joined|date:"d F Y" }}</p>
+        </div>
+        <div>
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Account Status</p>
+          <p class="text-sm {% if user.is_active %}text-green-400{% else %}text-red-400{% endif %}">
+            <i class="fas fa-circle text-xs mr-1"></i>
+            {% if user.is_active %}Active{% else %}Inactive{% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Preferences -->
+    {% if student_profile %}
+    <div class="glass-card rounded-2xl p-7 fade-in">
+      <h3 class="font-display font-bold text-white text-base mb-5 flex items-center gap-2">
+        <i class="fas fa-sliders text-cyan-400"></i> Learning Preferences
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="bg-white/5 rounded-xl p-4">
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Course Interest</p>
+          <p class="text-white text-sm">{{ student_profile.course_interest.title|default:"Not set" }}</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4">
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Learning Mode</p>
+          <p class="text-white text-sm capitalize">{{ student_profile.get_learning_mode_display }}</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4">
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Registered</p>
+          <p class="text-white text-sm">{{ student_profile.date_registered|date:"d F Y" }}</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-4">
+          <p class="text-cyber-muted text-xs uppercase tracking-wider mb-1">Terms Accepted</p>
+          <p class="text-sm {% if student_profile.terms_accepted %}text-green-400{% else %}text-red-400{% endif %}">
+            {% if student_profile.terms_accepted %}✅ Yes{% else %}❌ No{% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Password & Security -->
+    <div class="glass-card rounded-2xl p-7 fade-in">
+      <h3 class="font-display font-bold text-white text-base mb-5 flex items-center gap-2">
+        <i class="fas fa-shield-halved text-green-400"></i> Security
+      </h3>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-white text-sm font-medium">Password</p>
+          <p class="text-cyber-muted text-xs">Last changed: unknown</p>
+        </div>
+        <a href="/accounts/password/change/"
+          class="btn-outline px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1">
+          <i class="fas fa-key"></i> Change
+        </a>
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="glass-card rounded-2xl p-6 border border-red-500/20 fade-in">
+      <h3 class="font-display font-bold text-red-400 text-sm mb-3 flex items-center gap-2">
+        <i class="fas fa-triangle-exclamation"></i> Account Actions
+      </h3>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="/accounts/logout/"
+          class="flex items-center gap-2 bg-red-900/20 border border-red-500/30 text-red-400 px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-red-900/40 transition-colors">
+          <i class="fas fa-sign-out-alt"></i> Log Out
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

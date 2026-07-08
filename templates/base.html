@@ -1,0 +1,278 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}CyberTech Academy{% endblock %} | Empowering the Next Generation</title>
+  <meta name="description" content="{% block meta_desc %}CyberTech Academy — Professional online tech education. Courses, live Zoom sessions, and expert instructors.{% endblock %}" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'cyber-bg':      '#0A0E1A',
+            'cyber-card':    '#0F1628',
+            'cyber-border':  '#1A2540',
+            'cyber-cyan':    '#00F5FF',
+            'cyber-green':   '#39FF14',
+            'cyber-muted':   '#8892A4',
+            'cyber-surface': '#141C30',
+          },
+          fontFamily: {
+            display: ['Orbitron', 'sans-serif'],
+            body:    ['Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-cyan':  '0 0 20px rgba(0,245,255,0.3)',
+            'glow-green': '0 0 20px rgba(57,255,20,0.3)',
+            'card':       '0 4px 32px rgba(0,0,0,0.4)',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .font-display { font-family: 'Orbitron', sans-serif; }
+    body { background-color: #0A0E1A; color: #fff; }
+
+    /* Glassmorphism card */
+    .glass-card {
+      background: rgba(15,22,40,0.8);
+      border: 1px solid rgba(0,245,255,0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .glass-card:hover { border-color: rgba(0,245,255,0.4); box-shadow: 0 0 24px rgba(0,245,255,0.12); }
+
+    /* CTA glow pulse */
+    .btn-primary {
+      background: linear-gradient(135deg, #00F5FF, #0080ff);
+      color: #0A0E1A;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover { box-shadow: 0 0 24px rgba(0,245,255,0.5); transform: translateY(-2px); }
+
+    .btn-outline {
+      border: 1px solid #00F5FF;
+      color: #00F5FF;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover { background: rgba(0,245,255,0.1); box-shadow: 0 0 16px rgba(0,245,255,0.3); }
+
+    /* Form inputs */
+    .form-input {
+      width: 100%;
+      background: rgba(20,28,48,0.9);
+      border: 1px solid rgba(0,245,255,0.2);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus { border-color: #00F5FF; box-shadow: 0 0 0 3px rgba(0,245,255,0.15); }
+    .form-input::placeholder { color: #8892A4; }
+
+    /* Neon text */
+    .text-cyan  { color: #00F5FF; }
+    .text-green { color: #39FF14; }
+    .neon-text  { text-shadow: 0 0 10px rgba(0,245,255,0.6); }
+
+    /* Nav */
+    .nav-link { color: #8892A4; transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: #00F5FF; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0E1A; }
+    ::-webkit-scrollbar-thumb { background: #00F5FF44; border-radius: 3px; }
+
+    /* Fade-in animation */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* Progress bar */
+    .progress-bar { background: linear-gradient(90deg, #00F5FF, #39FF14); border-radius: 9999px; transition: width 0.6s ease; }
+
+    /* Badge */
+    .badge-cyan  { background: rgba(0,245,255,0.15); color: #00F5FF; border: 1px solid rgba(0,245,255,0.3); }
+    .badge-green { background: rgba(57,255,20,0.15); color: #39FF14; border: 1px solid rgba(57,255,20,0.3); }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen">
+
+  <!-- ── NAVBAR ─────────────────────────────────── -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-cyber-border" style="background:rgba(10,14,26,0.95);backdrop-filter:blur(12px);">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+       {% load static %}
+
+<a href="#">
+  <img src="{% static 'images/logo.png' %}" alt="CyberTech Logo" class="w-8 h-8 rounded-lg">
+  <span class="font-display font-bold text-lg text-white">
+    Cyber<span class="text-cyan">Tech</span>
+  </span>
+</a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-6">
+          <a href="/" class="nav-link text-sm {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+          <a href="/courses/" class="nav-link text-sm {% if 'courses' in request.path %}active{% endif %}">Courses</a>
+          <a href="/sessions/" class="nav-link text-sm {% if 'sessions' in request.path %}active{% endif %}">Live Sessions</a>
+          <a href="/contact/" class="nav-link text-sm {% if 'contact' in request.path %}active{% endif %}">Contact</a>
+        </div>
+
+        <!-- Auth Buttons -->
+        <div class="flex items-center gap-3">
+          {% if user.is_authenticated %}
+            <a href="/dashboard/" class="nav-link text-sm"><i class="fas fa-gauge-high mr-1"></i>Dashboard</a>
+            <a href="/accounts/logout/" class="btn-outline text-sm px-4 py-1.5 rounded-lg">Logout</a>
+          {% else %}
+            <a href="/accounts/login/" class="nav-link text-sm">Login</a>
+            <a href="/register/" class="btn-primary text-sm px-4 py-1.5 rounded-lg">Register Free</a>
+          {% endif %}
+        </div>
+
+        <!-- Mobile hamburger -->
+        <button id="mobile-menu-btn" class="md:hidden text-cyber-muted hover:text-white">
+          <i class="fas fa-bars text-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-cyber-border px-4 py-3 space-y-2" style="background:rgba(10,14,26,0.98)">
+      <a href="/" class="block nav-link py-2 text-sm">Home</a>
+      <a href="/courses/" class="block nav-link py-2 text-sm">Courses</a>
+      <a href="/sessions/" class="block nav-link py-2 text-sm">Live Sessions</a>
+      <a href="/contact/" class="block nav-link py-2 text-sm">Contact</a>
+      {% if user.is_authenticated %}
+        <a href="/dashboard/" class="block nav-link py-2 text-sm">Dashboard</a>
+        <a href="/accounts/logout/" class="block nav-link py-2 text-sm text-red-400">Logout</a>
+      {% else %}
+        <a href="/accounts/login/" class="block nav-link py-2 text-sm">Login</a>
+        <a href="/register/" class="block btn-primary text-center py-2 text-sm rounded-lg mt-2">Register Free</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- ── MESSAGES ────────────────────────────────── -->
+  {% if messages %}
+  <div class="fixed top-20 right-4 z-50 space-y-2 max-w-sm">
+    {% for msg in messages %}
+    <div class="glass-card p-4 rounded-xl flex items-start gap-3 shadow-glow-cyan
+      {% if msg.tags == 'error' %}border-red-500/40{% elif msg.tags == 'success' %}border-green-500/40{% else %}border-cyber-cyan/40{% endif %}">
+      <i class="fas {% if msg.tags == 'error' %}fa-circle-xmark text-red-400{% elif msg.tags == 'success' %}fa-circle-check text-green-400{% else %}fa-circle-info text-cyan-400{% endif %} mt-0.5"></i>
+      <p class="text-sm text-white">{{ msg }}</p>
+      <button onclick="this.parentElement.remove()" class="ml-auto text-cyber-muted hover:text-white text-xs">✕</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- ── MAIN CONTENT ───────────────────────────── -->
+  <main class="pt-16">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────── -->
+  <footer class="mt-20 border-t border-cyber-border" style="background:#0A0E1A;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Brand -->
+        <div class="md:col-span-1">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+              <i class="fas fa-microchip text-black text-sm"></i>
+            </div>
+            <span class="font-display font-bold text-white">Cyber<span class="text-cyan">Tech</span></span>
+          </div>
+          <p class="text-cyber-muted text-sm leading-relaxed">Empowering the Next Generation of Tech Innovators through world-class online education.</p>
+        </div>
+        <!-- Quick Links -->
+        <div>
+          <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/courses/" class="text-cyber-muted hover:text-cyan-400 transition-colors">Courses</a></li>
+            <li><a href="/sessions/" class="text-cyber-muted hover:text-cyan-400 transition-colors">Live Sessions</a></li>
+            <li><a href="/register/" class="text-cyber-muted hover:text-cyan-400 transition-colors">Register</a></li>
+            <li><a href="/contact/" class="text-cyber-muted hover:text-cyan-400 transition-colors">Contact</a></li>
+          </ul>
+        </div>
+        <!-- Categories -->
+<div>
+  <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Categories</h4>
+  <ul class="space-y-2 text-sm">
+    {% for cat in all_categories|slice:":4" %}
+    <li>
+      <a href="/courses/?cat={{ cat.slug }}"
+         class="text-cyber-muted hover:text-cyan-400 transition-colors">
+        {% if cat.icon %}<i class="fas {{ cat.icon }} mr-1 text-xs"></i>{% endif %}
+        {{ cat.name }}
+      </a>
+    </li>
+    {% empty %}
+    <li class="text-cyber-muted">No categories yet</li>
+    {% endfor %}
+  </ul>
+</div>
+        <!-- Contact -->
+        <div>
+          <h4 class="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Contact Us</h4>
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-center gap-2 text-cyber-muted">
+              <i class="fas fa-phone text-cyan-400 w-4"></i>
+              <a href="tel:+256705221604" class="hover:text-cyan-400 transition-colors">+256 705 221 604</a>
+            </li>
+            <li class="flex items-center gap-2 text-cyber-muted">
+              <i class="fas fa-phone text-cyan-400 w-4"></i>
+              <a href="tel:+256762899641" class="hover:text-cyan-400 transition-colors">+256 762 899 641</a>
+            </li>
+            <li class="flex items-center gap-2 text-cyber-muted">
+              <i class="fas fa-envelope text-cyan-400 w-4"></i>
+              <a href="mailto:chivankats@gmail.com" class="hover:text-cyan-400 transition-colors">cyberkarts41@gmail.com</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-cyber-border mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-cyber-muted text-sm">© 2025 CyberTech Academy. All rights reserved.</p>
+        <p class="text-cyber-muted text-xs">Built with <span class="text-cyan-400">❤️
+</span>By CyberKarts<span class="text-green-400"></span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Auto-dismiss messages after 5s
+    setTimeout(() => {
+      document.querySelectorAll('.fixed.top-20 > div').forEach(el => el.remove());
+    }, 5000);
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

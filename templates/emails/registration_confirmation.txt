@@ -1,0 +1,14 @@
+Welcome to CyberTech Academy, {{ user.first_name }}!
+
+Your account has been created successfully.
+
+Course of Interest: {{ course_name }}
+Learning Mode: {{ learning_mode }}
+
+Visit your dashboard: http://127.0.0.1:8000/dashboard/
+
+Need help?
+Phone: {{ contact_phone_1 }} | {{ contact_phone_2 }}
+Email: {{ contact_email }}
+
+© 2025 CyberTech Academy

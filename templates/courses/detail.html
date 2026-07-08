@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- ── LEFT: Course Info ─────────────────────── -->
+    <div class="lg:col-span-2">
+
+      <!-- Breadcrumb -->
+      <nav class="text-cyber-muted text-sm mb-6 fade-in flex items-center gap-2 flex-wrap">
+        <a href="/courses/" class="hover:text-cyan-400">Courses</a>
+        <span>/</span>
+        {% if course.category %}
+          <a href="/courses/?cat={{ course.category.slug }}" class="hover:text-cyan-400">{{ course.category.name }}</a>
+          <span>/</span>
+        {% endif %}
+        <span class="text-white truncate">{{ course.title }}</span>
+      </nav>
+
+      <!-- Header -->
+      <div class="fade-in mb-6">
+        <div class="flex flex-wrap gap-2 mb-3">
+          <span class="badge-cyan px-3 py-1 rounded-full text-xs">{{ course.get_difficulty_display }}</span>
+          {% if course.is_free %}<span class="badge-green px-3 py-1 rounded-full text-xs font-bold">FREE</span>{% endif %}
+          {% if course.category %}<span class="bg-white/5 text-cyber-muted px-3 py-1 rounded-full text-xs">{{ course.category.name }}</span>{% endif %}
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl font-bold text-white leading-tight mb-3">{{ course.title }}</h1>
+        <p class="text-cyber-muted text-base leading-relaxed">{{ course.description }}</p>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="glass-card rounded-xl p-4 mb-6 fade-in">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div><p class="text-white font-bold text-xl">{{ total_lessons }}</p><p class="text-cyber-muted text-xs">Lessons</p></div>
+          <div><p class="text-white font-bold text-xl">{{ course.duration_hours }}h</p><p class="text-cyber-muted text-xs">Duration</p></div>
+          <div><p class="text-white font-bold text-xl">{{ course.total_enrollments }}</p><p class="text-cyber-muted text-xs">Students</p></div>
+          <div><p class="text-white font-bold text-xl">{{ modules|length }}</p><p class="text-cyber-muted text-xs">Modules</p></div>
+        </div>
+      </div>
+
+      <!-- Access Banner -->
+      {% if is_enrolled and is_admitted %}
+        <div class="bg-green-900/20 border border-green-500/30 rounded-xl px-5 py-3 mb-6 fade-in flex items-center gap-3">
+          <i class="fas fa-unlock text-green-400 text-lg"></i>
+          <div>
+            <p class="text-green-400 text-sm font-semibold">You're enrolled — full access granted</p>
+            <p class="text-cyber-muted text-xs">Click any lesson below to start learning</p>
+          </div>
+          <div class="ml-auto">
+            <div class="flex justify-between text-xs text-cyber-muted mb-1"><span>Progress</span><span>{{ user_progress }}%</span></div>
+            <div class="w-24 h-1.5 bg-cyber-border rounded-full"><div class="progress-bar h-1.5 rounded-full" style="width:{{ user_progress }}%"></div></div>
+          </div>
+        </div>
+      {% elif not is_admitted and user.is_authenticated %}
+        <div class="bg-yellow-900/20 border border-yellow-500/30 rounded-xl px-5 py-3 mb-6 fade-in flex items-center gap-3">
+          <i class="fas fa-hourglass-half text-yellow-400 text-lg"></i>
+          <p class="text-yellow-300 text-sm">Complete your <a href="{% url 'students:admission_pending' %}" class="underline">admission</a> to enroll in courses.</p>
+        </div>
+      {% endif %}
+
+      <!-- ── Curriculum Accordion ────────────────── -->
+      <div class="fade-in">
+        <h2 class="font-display font-bold text-white text-xl mb-4 flex items-center gap-2">
+          <i class="fas fa-list-ul text-cyan-400"></i> Course Curriculum
+        </h2>
+        <div class="space-y-3">
+          {% for module in modules %}
+          <div class="glass-card rounded-xl overflow-hidden">
+            <!-- Module header -->
+            <button onclick="toggleMod('mod{{ forloop.counter }}')"
+              class="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 transition-colors">
+              <div class="flex items-center gap-3">
+                <div class="w-7 h-7 bg-cyan-400/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span class="text-cyan-400 text-xs font-bold">{{ forloop.counter }}</span>
+                </div>
+                <div>
+                  <p class="text-white font-medium text-sm">{{ module.title }}</p>
+                  <p class="text-cyber-muted text-xs">{{ module.lessons.count }} lesson{{ module.lessons.count|pluralize }}</p>
+                </div>
+              </div>
+              <i id="icon{{ forloop.counter }}" class="fas fa-chevron-down text-cyber-muted text-sm transition-transform"></i>
+            </button>
+
+            <!-- Lesson rows -->
+            <div id="mod{{ forloop.counter }}" class="hidden border-t border-cyber-border">
+              {% for lesson in module.lessons.all %}
+              <div class="flex items-center gap-3 px-4 py-3
+                {% if not forloop.last %}border-b border-cyber-border/40{% endif %}
+                hover:bg-white/5 transition-colors group">
+
+                <!-- Type icon -->
+                <div class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full
+                  {% if lesson.is_preview %}bg-green-400/10{% else %}bg-white/5{% endif %}">
+                  {% if lesson.content_type == 'video' %}
+                    <i class="fas fa-play text-cyan-400 text-xs"></i>
+                  {% elif lesson.content_type == 'audio' %}
+                    <i class="fas fa-headphones text-purple-400 text-xs"></i>
+                  {% elif lesson.content_type == 'pdf' %}
+                    <i class="fas fa-file-pdf text-red-400 text-xs"></i>
+                  {% elif lesson.content_type == 'quiz' %}
+                    <i class="fas fa-question text-yellow-400 text-xs"></i>
+                  {% else %}
+                    <i class="fas fa-file-lines text-green-400 text-xs"></i>
+                  {% endif %}
+                </div>
+
+                <!-- Title + meta -->
+                <div class="flex-1 min-w-0">
+                  <p class="text-white text-sm truncate">{{ lesson.title }}</p>
+                  <p class="text-cyber-muted text-xs">
+                    {{ lesson.get_content_type_display }}
+                    {% if lesson.duration_minutes %} · {{ lesson.duration_minutes }} min{% endif %}
+                  </p>
+                </div>
+
+                <!-- Right side: badge + CTA -->
+                <div class="flex items-center gap-2 flex-shrink-0">
+                  {% if lesson.is_preview %}
+                    <span class="badge-green px-2 py-0.5 rounded-full text-xs">Preview</span>
+                    <a href="{% url 'courses:lesson' course_slug=course.slug lesson_id=lesson.id %}"
+                      class="text-cyan-400 text-xs hover:underline font-medium flex items-center gap-1">
+                      Watch <i class="fas fa-play text-xs"></i>
+                    </a>
+                  {% elif is_enrolled and is_admitted %}
+                    <a href="{% url 'courses:lesson' course_slug=course.slug lesson_id=lesson.id %}"
+                      class="text-cyan-400 text-xs hover:underline font-medium opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                      Open <i class="fas fa-arrow-right text-xs"></i>
+                    </a>
+                  {% else %}
+                    <i class="fas fa-lock text-cyber-muted/50 text-xs"></i>
+                  {% endif %}
+                </div>
+              </div>
+              {% empty %}
+                <p class="px-5 py-4 text-cyber-muted text-sm">No lessons yet.</p>
+              {% endfor %}
+            </div>
+          </div>
+          {% empty %}
+            <p class="text-cyber-muted text-center py-6">Curriculum coming soon.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Instructor -->
+      {% if course.instructor %}
+      <div class="glass-card rounded-2xl p-6 mt-8 fade-in">
+        <h2 class="font-display font-bold text-white text-lg mb-4 flex items-center gap-2">
+          <i class="fas fa-chalkboard-teacher text-cyan-400"></i> Instructor
+        </h2>
+        <div class="flex items-start gap-4">
+          <div class="w-14 h-14 rounded-full bg-cyan-400/10 flex items-center justify-center flex-shrink-0">
+            {% if course.instructor.avatar %}
+              <img src="{{ course.instructor.avatar.url }}" class="w-14 h-14 rounded-full object-cover" />
+            {% else %}
+              <i class="fas fa-user text-cyan-400 text-xl"></i>
+            {% endif %}
+          </div>
+          <div>
+            <p class="text-white font-semibold">{{ course.instructor.get_full_name }}</p>
+            <p class="text-cyber-muted text-sm leading-relaxed">{{ course.instructor.bio|default:"Expert Instructor at CyberTech Academy" }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ── RIGHT: Enroll Sidebar ──────────────────── -->
+    <div class="lg:col-span-1">
+      <div class="glass-card rounded-2xl p-6 sticky top-20 fade-in">
+        {% if course.thumbnail %}
+          <div class="rounded-xl overflow-hidden mb-5 h-40">
+            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="w-full h-full object-cover" />
+          </div>
+        {% endif %}
+
+        <!-- Price -->
+        <div class="mb-5">
+          {% if course.is_free %}
+            <p class="text-3xl font-bold font-display text-green-400">Free</p>
+          {% else %}
+            <p class="text-3xl font-bold font-display text-white">UGX {{ course.price|floatformat:0 }}</p>
+          {% endif %}
+        </div>
+
+        <!-- CTA -->
+        {% if is_enrolled and is_admitted %}
+          {% if user_progress > 0 %}
+          <div class="mb-4">
+            <div class="flex justify-between text-xs text-cyber-muted mb-1">
+              <span>Your Progress</span><span>{{ user_progress }}%</span>
+            </div>
+            <div class="w-full h-2 bg-cyber-border rounded-full">
+              <div class="progress-bar h-2 rounded-full" style="width:{{ user_progress }}%"></div>
+            </div>
+          </div>
+          {% endif %}
+          <!-- First lesson link -->
+          {% for module in modules %}
+            {% for lesson in module.lessons.all %}
+              {% if forloop.parentloop.first and forloop.first %}
+                <a href="{% url 'courses:lesson' course_slug=course.slug lesson_id=lesson.id %}"
+                  class="btn-primary w-full py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2 mb-3">
+                  <i class="fas fa-play-circle"></i>
+                  {% if user_progress > 0 %}Continue Learning{% else %}Start Learning{% endif %}
+                </a>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+          <p class="text-center text-green-400 text-sm flex items-center justify-center gap-1">
+            <i class="fas fa-check-circle"></i> Enrolled
+          </p>
+
+        {% elif user.is_authenticated and is_admitted %}
+          <a href="{% url 'students:enroll' course_slug=course.slug %}"
+            class="btn-primary w-full py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2 mb-3">
+            <i class="fas fa-rocket"></i>
+            {% if course.is_free %}Enroll for Free{% else %}Enroll Now{% endif %}
+          </a>
+
+        {% elif user.is_authenticated %}
+          <a href="{% url 'students:admission_pending' %}"
+            class="btn-outline w-full py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2 mb-3 text-yellow-400 border-yellow-400/40">
+            <i class="fas fa-hourglass-half"></i> Complete Admission First
+          </a>
+
+        {% else %}
+          <a href="/register/"
+            class="btn-primary w-full py-3 rounded-xl font-semibold text-center flex items-center justify-center gap-2 mb-3">
+            <i class="fas fa-user-plus"></i> Register to Enroll
+          </a>
+          <a href="/accounts/login/?next=/courses/{{ course.slug }}/"
+            class="btn-outline w-full py-2.5 rounded-xl font-semibold text-center flex items-center justify-center gap-2">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </a>
+        {% endif %}
+
+        <!-- Includes -->
+        <div class="mt-5 space-y-2 text-sm text-cyber-muted border-t border-cyber-border pt-4">
+          <p class="font-semibold text-white text-xs uppercase tracking-wider mb-3">This course includes:</p>
+          <p class="flex items-center gap-2"><i class="fas fa-video text-cyan-400 w-4"></i> {{ total_lessons }} lessons</p>
+          <p class="flex items-center gap-2"><i class="fas fa-clock text-cyan-400 w-4"></i> {{ course.duration_hours }} hours of content</p>
+          <p class="flex items-center gap-2"><i class="fas fa-infinity text-cyan-400 w-4"></i> Full lifetime access</p>
+          <p class="flex items-center gap-2"><i class="fas fa-mobile-alt text-cyan-400 w-4"></i> Access on all devices</p>
+          <p class="flex items-center gap-2"><i class="fas fa-certificate text-cyan-400 w-4"></i> Certificate of completion</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Related Courses -->
+  {% if related %}
+  <div class="mt-16 fade-in">
+    <h2 class="font-display font-bold text-white text-2xl mb-6">Related Courses</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {% for r in related %}
+      <a href="/courses/{{ r.slug }}/" class="glass-card rounded-xl p-5 hover:-translate-y-1 transition-transform">
+        <h3 class="text-white font-semibold text-sm mb-1">{{ r.title }}</h3>
+        <p class="text-cyber-muted text-xs">{{ r.get_difficulty_display }} · {{ r.total_lessons }} lessons</p>
+        <p class="text-cyan-400 text-sm font-bold mt-2">{% if r.is_free %}Free{% else %}UGX {{ r.price|floatformat:0 }}{% endif %}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleMod(id) {
+  const el   = document.getElementById(id);
+  const num  = id.replace('mod','');
+  const icon = document.getElementById('icon' + num);
+  el.classList.toggle('hidden');
+  icon.style.transform = el.classList.contains('hidden') ? '' : 'rotate(180deg)';
+}
+// Open first module by default
+window.addEventListener('DOMContentLoaded', () => { toggleMod('mod1'); });
+</script>
+{% endblock %}

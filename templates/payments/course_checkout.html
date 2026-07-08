@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Checkout — {{ course.title }}{% endblock %}
+{% block content %}
+<section class="max-w-lg mx-auto px-4 py-16">
+  <div class="glass-card rounded-2xl p-8 fade-in">
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 bg-cyan-400/10 rounded-full flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-graduation-cap text-cyan-400 text-2xl"></i>
+      </div>
+      <h1 class="font-display text-2xl font-bold text-white mb-1">Enroll in Course</h1>
+      <p class="text-cyber-muted text-sm">Secure payment via Pesapal</p>
+    </div>
+
+    <div class="bg-white/5 rounded-xl p-5 mb-6">
+      <p class="text-cyber-muted text-xs uppercase tracking-wider mb-3">Order Summary</p>
+      <div class="flex justify-between items-start mb-2">
+        <div>
+          <p class="text-white font-semibold text-sm">{{ course.title }}</p>
+          <p class="text-cyber-muted text-xs mt-0.5">{{ course.get_difficulty_display }} · {{ course.total_lessons }} lessons</p>
+        </div>
+        <p class="text-cyan-400 font-bold text-lg">UGX {{ course.price|floatformat:0 }}</p>
+      </div>
+      <div class="border-t border-cyber-border mt-3 pt-3 flex justify-between">
+        <span class="text-cyber-muted text-sm">Total</span>
+        <span class="text-white font-bold">UGX {{ course.price|floatformat:0 }}</span>
+      </div>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn-primary w-full py-3.5 rounded-xl font-semibold text-base flex items-center justify-center gap-2 mb-4">
+        <i class="fas fa-lock"></i> Pay UGX {{ course.price|floatformat:0 }} & Enroll
+      </button>
+    </form>
+    <a href="/courses/{{ course.slug }}/" class="text-cyber-muted text-sm text-center block hover:text-white transition-colors">← Cancel</a>
+
+    <div class="flex items-center justify-center gap-4 mt-6 pt-4 border-t border-cyber-border">
+      <i class="fas fa-shield-halved text-green-400"></i>
+      <p class="text-cyber-muted text-xs">Secured by Flutterwave · SSL Encrypted</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

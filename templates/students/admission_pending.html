@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Application Received{% endblock %}
+{% block content %}
+<section class="min-h-screen flex items-center justify-center px-4 py-20">
+  <div class="max-w-lg w-full text-center fade-in">
+
+    <!-- Animated Icon -->
+    <div class="relative inline-flex mb-8">
+      <div class="w-24 h-24 rounded-full bg-yellow-400/10 border border-yellow-400/30 flex items-center justify-center">
+        <i class="fas fa-hourglass-half text-yellow-400 text-4xl"></i>
+      </div>
+      <span class="absolute top-1 right-1 w-5 h-5 bg-yellow-400 rounded-full animate-ping opacity-60"></span>
+    </div>
+
+    <div class="inline-flex items-center gap-2 badge-cyan px-4 py-1.5 rounded-full text-sm mb-4">
+      <i class="fas fa-file-circle-check"></i> Application Submitted
+    </div>
+
+    <h1 class="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+      You're on the <span class="text-yellow-400">Waiting List!</span>
+    </h1>
+
+    <div class="glass-card rounded-2xl p-7 text-left mb-6">
+      <h3 class="text-white font-semibold mb-4 flex items-center gap-2">
+        <i class="fas fa-list-check text-cyan-400"></i> What happens next?
+      </h3>
+      <ol class="space-y-4">
+        <li class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-cyan-400/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-cyan-400 text-xs font-bold">1</span>
+          </div>
+          <div>
+            <p class="text-white text-sm font-medium">Application Review</p>
+            <p class="text-cyber-muted text-xs mt-0.5">Our team reviews your application within 1–2 business days.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-cyan-400/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-cyan-400 text-xs font-bold">2</span>
+          </div>
+          <div>
+            <p class="text-white text-sm font-medium">Admission Email</p>
+            <p class="text-cyber-muted text-xs mt-0.5">If admitted, you'll receive an email with your payment link.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-green-400/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-green-400 text-xs font-bold">3</span>
+          </div>
+          <div>
+            <p class="text-white text-sm font-medium">Pay Admission Fee — UGX 20,000</p>
+            <p class="text-cyber-muted text-xs mt-0.5">A one-time fee to activate your account and unlock all courses.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-3">
+          <div class="w-7 h-7 bg-purple-400/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-purple-400 text-xs font-bold">4</span>
+          </div>
+          <div>
+            <p class="text-white text-sm font-medium">Full Access Granted 🚀</p>
+            <p class="text-cyber-muted text-xs mt-0.5">Login and start learning immediately after payment.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Already admitted? -->
+    <div class="glass-card rounded-2xl p-5 mb-6">
+      <p class="text-cyber-muted text-sm mb-3">Already received your admission email?</p>
+      <a href="/admission/pay/" class="btn-primary px-6 py-2.5 rounded-xl font-semibold text-sm inline-flex items-center gap-2">
+        <i class="fas fa-credit-card"></i> Pay Admission Fee Now
+      </a>
+    </div>
+
+    <p class="text-cyber-muted text-sm">
+      Questions? Call
+      <a href="tel:+256705221604" class="text-cyan-400 hover:underline">+256 705 221 604</a>
+      or email
+      <a href="mailto:chivankats@gmail.com" class="text-cyan-400 hover:underline">chivankats@gmail.com</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

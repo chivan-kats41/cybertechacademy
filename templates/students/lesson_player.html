@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}{{ lesson.title }} — {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="flex flex-col lg:flex-row min-h-screen pt-0" style="height:calc(100vh - 64px);">
+
+  <!-- LEFT: Video Player -->
+  <div class="flex-1 flex flex-col bg-black">
+    <!-- Video Area -->
+    <div class="relative bg-black flex-1 flex items-center justify-center min-h-64">
+      {% if lesson.content_type == 'video' and lesson.video_url %}
+        {% if 'youtube.com' in lesson.video_url or 'youtu.be' in lesson.video_url %}
+          <iframe src="{{ lesson.video_url|replace:'watch?v=','embed/' }}"
+            class="w-full h-full min-h-96" frameborder="0" allowfullscreen></iframe>
+        {% elif 'vimeo.com' in lesson.video_url %}
+          <iframe src="{{ lesson.video_url|replace:'vimeo.com/','player.vimeo.com/video/' }}"
+            class="w-full h-full min-h-96" frameborder="0" allowfullscreen></iframe>
+        {% else %}
+          <video controls class="w-full max-h-screen">
+            <source src="{{ lesson.video_url }}" />
+          </video>
+        {% endif %}
+      {% elif lesson.content_type == 'pdf' and lesson.file_upload %}
+        <iframe src="{{ lesson.file_upload.url }}" class="w-full h-full min-h-screen"></iframe>
+      {% elif lesson.content_type == 'text' %}
+        <div class="max-w-3xl w-full mx-auto p-8 text-white leading-relaxed">
+          {{ lesson.text_content|linebreaks }}
+        </div>
+      {% else %}
+        <div class="text-center p-12">
+          <i class="fas fa-play-circle text-cyan-400 text-6xl mb-4 block"></i>
+          <p class="text-cyber-muted">Content for this lesson is being uploaded.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Lesson Info Bar -->
+    <div class="glass-card border-t border-cyber-border p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div>
+        <h2 class="text-white font-semibold text-base">{{ lesson.title }}</h2>
+        <p class="text-cyber-muted text-xs">{{ course.title }} · {{ lesson.module.title }}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        {% if progress_obj.completed %}
+          <span class="badge-green px-3 py-1.5 rounded-lg text-sm flex items-center gap-1">
+            <i class="fas fa-check-circle"></i> Completed
+          </span>
+        {% else %}
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="complete" />
+            <button type="submit" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2">
+              <i class="fas fa-check"></i> Mark Complete
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Sidebar Navigation -->
+  <div class="w-full lg:w-80 xl:w-96 bg-cyber-card border-l border-cyber-border flex flex-col overflow-hidden">
+    <!-- Sidebar Header -->
+    <div class="p-4 border-b border-cyber-border flex-shrink-0">
+      <a href="/learn/{{ course.slug }}/" class="text-cyan-400 text-xs hover:underline flex items-center gap-1 mb-2">
+        <i class="fas fa-arrow-left"></i> Back to Course
+      </a>
+      <h3 class="text-white font-semibold text-sm truncate">{{ course.title }}</h3>
+      <!-- Overall Progress -->
+      <div class="mt-2">
+        <div class="flex justify-between text-xs text-cyber-muted mb-1">
+          <span>Progress</span><span>{{ enrollment.progress_percent }}%</span>
+        </div>
+        <div class="w-full h-1.5 bg-cyber-border rounded-full">
+          <div class="progress-bar h-1.5 rounded-full" style="width:{{ enrollment.progress_percent }}%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module + Lesson List -->
+    <div class="flex-1 overflow-y-auto">
+      {% for module in modules %}
+      <div>
+        <div class="px-4 py-2.5 bg-cyber-surface sticky top-0">
+          <p class="text-cyber-muted text-xs font-semibold uppercase tracking-wider">{{ module.title }}</p>
+        </div>
+        {% for l in module.lessons.all %}
+        <a href="/learn/{{ course.slug }}/lesson/{{ l.id }}/"
+          class="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors border-b border-cyber-border/30
+            {% if l.id == lesson.id %}bg-cyan-400/10 border-l-2 border-l-cyan-400{% endif %}">
+          <div class="w-6 h-6 flex-shrink-0 flex items-center justify-center">
+            {% if l.id|stringformat:"s" in completed_ids|join:"," %}
+              <i class="fas fa-check-circle text-green-400 text-sm"></i>
+            {% elif l.id == lesson.id %}
+              <i class="fas fa-play-circle text-cyan-400 text-sm"></i>
+            {% else %}
+              <i class="far fa-circle text-cyber-muted text-sm"></i>
+            {% endif %}
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="text-sm {% if l.id == lesson.id %}text-cyan-400 font-medium{% else %}text-white{% endif %} truncate">
+              {{ l.title }}
+            </p>
+            <p class="text-cyber-muted text-xs">
+              {% if l.content_type == 'video' %}<i class="fas fa-video mr-1"></i>{% elif l.content_type == 'pdf' %}<i class="fas fa-file-pdf mr-1"></i>{% elif l.content_type == 'quiz' %}<i class="fas fa-question mr-1"></i>{% else %}<i class="fas fa-file-lines mr-1"></i>{% endif %}
+              {{ l.get_content_type_display }}{% if l.duration_minutes %} · {{ l.duration_minutes }}m{% endif %}
+            </p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

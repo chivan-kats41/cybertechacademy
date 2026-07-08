@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+  <!-- Header -->
+  <div class="text-center mb-12 fade-in">
+    <div class="inline-flex items-center gap-2 badge-cyan px-4 py-1.5 rounded-full text-sm mb-4">
+      <i class="fas fa-book-open"></i> {{ total_count }} Course{{ total_count|pluralize }} Available
+    </div>
+    <h1 class="font-display text-4xl font-bold text-white mb-3">
+      Explore <span class="text-cyan neon-text">Courses</span>
+    </h1>
+    <p class="text-cyber-muted max-w-xl mx-auto">From beginner to advanced — find your path in tech.</p>
+  </div>
+
+  <!-- Filters Bar -->
+  <form method="get" class="glass-card rounded-2xl p-5 mb-8 fade-in">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+      <!-- Search -->
+      <div class="lg:col-span-2 relative">
+        <i class="fas fa-search absolute left-3 top-3.5 text-cyber-muted text-sm"></i>
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Search courses..."
+          class="form-input pl-9 text-sm" />
+      </div>
+      <!-- Category -->
+      <select name="cat" class="form-input text-sm">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.slug }}" {% if active_cat == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+      <!-- Difficulty -->
+      <select name="difficulty" class="form-input text-sm">
+        <option value="">All Levels</option>
+        {% for val, label in difficulties %}
+          <option value="{{ val }}" {% if active_diff == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+      <!-- Price + Submit -->
+      <div class="flex gap-2">
+        <select name="price" class="form-input text-sm flex-1">
+          <option value="">All Prices</option>
+          <option value="free"  {% if active_price == 'free' %}selected{% endif %}>Free</option>
+          <option value="paid"  {% if active_price == 'paid' %}selected{% endif %}>Paid</option>
+        </select>
+        <button type="submit" class="btn-primary px-4 rounded-xl text-sm font-semibold whitespace-nowrap">
+          <i class="fas fa-filter"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Course Grid -->
+  {% if courses %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for course in courses %}
+    <div class="glass-card rounded-2xl overflow-hidden fade-in group hover:-translate-y-1 transition-transform duration-300">
+      <!-- Thumbnail -->
+      <div class="relative h-44 bg-cyber-surface overflow-hidden">
+        {% if course.thumbnail %}
+          <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        {% else %}
+          <div class="w-full h-full flex items-center justify-center">
+            <i class="fas fa-laptop-code text-cyan-400/40 text-5xl"></i>
+          </div>
+        {% endif %}
+        <!-- Badges -->
+        <div class="absolute top-3 left-3 flex gap-2">
+          {% if course.is_free %}
+            <span class="badge-green px-2.5 py-1 rounded-full text-xs font-semibold">FREE</span>
+          {% endif %}
+          {% if course.is_featured %}
+            <span class="badge-cyan px-2.5 py-1 rounded-full text-xs font-semibold">⭐ Featured</span>
+          {% endif %}
+        </div>
+        <div class="absolute top-3 right-3">
+          <span class="bg-black/60 text-white text-xs px-2 py-1 rounded-lg">
+            {{ course.get_difficulty_display }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-5">
+        {% if course.category %}
+          <span class="text-cyan-400/70 text-xs uppercase tracking-wider">{{ course.category.name }}</span>
+        {% endif %}
+        <h3 class="text-white font-semibold text-base mt-1 mb-2 leading-snug line-clamp-2">{{ course.title }}</h3>
+        <p class="text-cyber-muted text-sm line-clamp-2 mb-4">{{ course.description|truncatewords:18 }}</p>
+
+        <!-- Meta -->
+        <div class="flex items-center gap-4 text-cyber-muted text-xs mb-4">
+          <span><i class="fas fa-play-circle mr-1 text-cyan-400/60"></i>{{ course.total_lessons }} lessons</span>
+          <span><i class="fas fa-clock mr-1 text-cyan-400/60"></i>{{ course.duration_hours }}h</span>
+          <span><i class="fas fa-users mr-1 text-cyan-400/60"></i>{{ course.total_enrollments }}</span>
+        </div>
+
+        <!-- Instructor -->
+        {% if course.instructor %}
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-6 h-6 rounded-full bg-cyan-400/20 flex items-center justify-center">
+            <i class="fas fa-user text-cyan-400 text-xs"></i>
+          </div>
+          <span class="text-cyber-muted text-xs">{{ course.instructor.get_full_name }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Price + CTA -->
+        <div class="flex items-center justify-between pt-3 border-t border-cyber-border">
+          <div>
+            {% if course.is_free %}
+              <span class="text-green-400 font-bold text-lg">Free</span>
+            {% else %}
+              <span class="text-white font-bold text-lg">UGX {{ course.price|floatformat:0 }}</span>
+            {% endif %}
+          </div>
+          <a href="/courses/{{ course.slug }}/" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">
+            View Course
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="text-center py-20 fade-in">
+    <i class="fas fa-search text-4xl text-cyber-muted mb-4 block"></i>
+    <h3 class="text-white font-semibold text-lg mb-2">No courses found</h3>
+    <p class="text-cyber-muted text-sm mb-4">Try adjusting your filters or search term.</p>
+    <a href="/courses/" class="btn-outline px-5 py-2 rounded-lg text-sm font-semibold inline-block">Clear Filters</a>
+  </div>
+  {% endif %}
+
+</section>
+{% endblock %}

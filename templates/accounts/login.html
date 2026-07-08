@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<section class="min-h-screen flex items-center justify-center py-20 px-4">
+  <div class="relative w-full max-w-md fade-in">
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 bg-cyan-400/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-cyan-400/20">
+        <i class="fas fa-microchip text-cyan-400 text-2xl"></i>
+      </div>
+      <h1 class="font-display text-3xl font-bold text-white mb-1">Welcome Back</h1>
+      <p class="text-cyber-muted text-sm">Sign in to your CyberTech Academy account</p>
+    </div>
+
+    <div class="glass-card rounded-2xl p-8">
+      <form method="POST" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class="bg-red-900/30 border border-red-500/40 rounded-xl p-4 mb-5">
+          <p class="text-red-400 text-sm flex items-center gap-2">
+            <i class="fas fa-triangle-exclamation"></i>
+            Invalid email or password. Please try again.
+          </p>
+        </div>
+        {% endif %}
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-cyber-muted text-sm mb-1.5">Email Address</label>
+            <input type="email" name="login" autocomplete="email" required
+              class="form-input" placeholder="you@example.com"
+              value="{{ form.login.value|default:'' }}" />
+          </div>
+          <div>
+            <label class="block text-cyber-muted text-sm mb-1.5">Password</label>
+            <div class="relative">
+              <input type="password" name="password" id="loginPw" required
+                class="form-input pr-10" placeholder="Your password" />
+              <button type="button" onclick="togglePw('loginPw')"
+                class="absolute right-3 top-3 text-cyber-muted hover:text-white">
+                <i class="fas fa-eye text-sm"></i>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center gap-2 text-cyber-muted cursor-pointer">
+              <input type="checkbox" name="remember" class="accent-cyan-400" />
+              Remember me
+            </label>
+            <a href="/accounts/password/reset/" class="text-cyan-400 hover:underline text-xs">
+              Forgot password?
+            </a>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold mt-6 flex items-center justify-center gap-2">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+
+        <p class="text-center text-cyber-muted text-sm mt-5">
+          Don't have an account?
+          <a href="/register/" class="text-cyan-400 hover:underline font-medium">Register free</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+function togglePw(id) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+</script>
+{% endblock %}

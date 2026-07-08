@@ -1,0 +1,14 @@
+Zoom Access Confirmed - {{ session.title }}
+
+Hi {{ user.first_name }},
+
+Your payment was successful! Here are your session details:
+
+Session: {{ session.title }}
+Date: {{ session.scheduled_at }}
+Zoom Link: {{ session.zoom_link }}
+
+Contact: {{ contact_phone_1 }} | {{ contact_email }}
+
+© 2025 CyberTech Academy
+'''

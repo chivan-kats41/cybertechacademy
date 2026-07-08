@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row items-start justify-between gap-4 mb-8 fade-in">
+    <div>
+      <a href="/dashboard/" class="text-cyan-400 text-xs hover:underline flex items-center gap-1 mb-2">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+      </a>
+      <h1 class="font-display text-2xl md:text-3xl font-bold text-white">{{ course.title }}</h1>
+      <p class="text-cyber-muted text-sm mt-1">{{ course.total_lessons }} lessons · {{ course.duration_hours }}h total</p>
+    </div>
+    <!-- Progress Ring -->
+    <div class="glass-card rounded-xl p-4 text-center min-w-32">
+      <p class="text-3xl font-bold font-display text-cyan-400">{{ progress }}%</p>
+      <p class="text-cyber-muted text-xs mt-0.5">Complete</p>
+      {% if enrollment.completed %}
+        <span class="badge-green px-2 py-0.5 rounded-full text-xs mt-2 inline-block">✅ Finished!</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="mb-8 fade-in">
+    <div class="w-full h-2 bg-cyber-border rounded-full">
+      <div class="progress-bar h-2 rounded-full" style="width:{{ progress }}%"></div>
+    </div>
+  </div>
+
+  <!-- Modules & Lessons -->
+  <div class="space-y-4">
+    {% for module in modules %}
+    <div class="glass-card rounded-2xl overflow-hidden fade-in">
+      <!-- Module Header -->
+      <div class="flex items-center justify-between p-5 border-b border-cyber-border cursor-pointer"
+        onclick="toggleModule('m{{ forloop.counter }}')">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-cyan-400/10 rounded-lg flex items-center justify-center">
+            <span class="text-cyan-400 text-sm font-bold font-display">{{ forloop.counter }}</span>
+          </div>
+          <div>
+            <p class="text-white font-semibold">{{ module.title }}</p>
+            <p class="text-cyber-muted text-xs">{{ module.lessons.count }} lesson{{ module.lessons.count|pluralize }}</p>
+          </div>
+        </div>
+        <i id="mi{{ forloop.counter }}" class="fas fa-chevron-down text-cyber-muted transition-transform"></i>
+      </div>
+
+      <!-- Lessons List -->
+      <div id="m{{ forloop.counter }}">
+        {% for lesson in module.lessons.all %}
+        {% with lid=lesson.id|stringformat:"s" %}
+        <div class="flex items-center justify-between px-5 py-4
+          {% if not forloop.last %}border-b border-cyber-border/40{% endif %}
+          hover:bg-white/5 transition-colors">
+          <div class="flex items-center gap-3">
+            <!-- Status Icon -->
+            <div class="w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-full
+              {% if lid in completed_ids|join:',' %}bg-green-400/10{% else %}bg-white/5{% endif %}">
+              {% if lid in completed_ids|join:"," %}
+                <i class="fas fa-check-circle text-green-400 text-sm"></i>
+              {% elif lesson.content_type == 'video' %}
+                <i class="fas fa-play text-cyan-400 text-xs"></i>
+              {% elif lesson.content_type == 'pdf' %}
+                <i class="fas fa-file-pdf text-red-400 text-xs"></i>
+              {% elif lesson.content_type == 'quiz' %}
+                <i class="fas fa-question text-yellow-400 text-xs"></i>
+              {% else %}
+                <i class="fas fa-file-lines text-green-400 text-xs"></i>
+              {% endif %}
+            </div>
+            <div>
+              <p class="text-white text-sm font-medium">{{ lesson.title }}</p>
+              <p class="text-cyber-muted text-xs">
+                {{ lesson.get_content_type_display }}
+                {% if lesson.duration_minutes %} · {{ lesson.duration_minutes }} min{% endif %}
+              </p>
+            </div>
+          </div>
+          <a href="/learn/{{ course.slug }}/lesson/{{ lesson.id }}/"
+            class="{% if lid in completed_ids|join:',' %}badge-green{% else %}btn-primary{% endif %}
+              px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1">
+            {% if lid in completed_ids|join:"," %}
+              <i class="fas fa-redo"></i> Review
+            {% else %}
+              <i class="fas fa-play"></i> Start
+            {% endif %}
+          </a>
+        </div>
+        {% endwith %}
+        {% empty %}
+        <div class="px-5 py-4 text-cyber-muted text-sm">No lessons in this module yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+    {% empty %}
+    <div class="glass-card rounded-2xl p-12 text-center fade-in">
+      <i class="fas fa-book-open text-4xl text-cyber-muted mb-4 block"></i>
+      <p class="text-cyber-muted">Course content is being prepared. Check back soon!</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleModule(id) {
+  const el   = document.getElementById(id);
+  const icon = document.getElementById('mi' + id.replace('m',''));
+  el.classList.toggle('hidden');
+  icon.style.transform = el.classList.contains('hidden') ? '' : 'rotate(180deg)';
+}
+</script>
+{% endblock %}

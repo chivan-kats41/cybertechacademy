@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body { background:#0A0E1A; color:#fff; font-family:Inter,sans-serif; margin:0; padding:0; }
+    .container { max-width:600px; margin:0 auto; padding:40px 20px; }
+    .card { background:#0F1628; border:1px solid rgba(0,245,255,0.2); border-radius:16px; padding:40px; }
+    .logo { font-size:22px; font-weight:900; letter-spacing:2px; margin-bottom:24px; }
+    .cyan { color:#00F5FF; }
+    .green { color:#39FF14; }
+    .muted { color:#8892A4; font-size:14px; }
+    .btn { background:linear-gradient(135deg,#00F5FF,#0080ff); color:#0A0E1A; padding:14px 32px;
+           border-radius:10px; text-decoration:none; font-weight:700; display:inline-block; margin:24px 0; }
+    .divider { border:none; border-top:1px solid rgba(0,245,255,0.1); margin:24px 0; }
+    .contact-row { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:14px; color:#8892A4; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">Cyber<span class="cyan">Tech</span> Academy</div>
+      <h2 style="font-size:24px;margin:0 0 8px">Welcome, {{ user.first_name }}! 🚀</h2>
+      <p class="muted">Your account has been created successfully.</p>
+      <hr class="divider" />
+      <p style="font-size:15px;line-height:1.7;color:#ccc;">
+        You have registered for <strong class="cyan">{{ course_name }}</strong>
+        with <strong>{{ learning_mode }}</strong> as your preferred learning mode.
+      </p>
+      <p style="font-size:15px;line-height:1.7;color:#ccc;">
+        Head over to your dashboard to explore your courses, track progress,
+        and join live Zoom sessions with expert instructors.
+      </p>
+      <a href="http://127.0.0.1:8000/dashboard/" class="btn">Go to My Dashboard →</a>
+      <hr class="divider" />
+      <p class="muted" style="margin-bottom:8px;">Need help? Reach us anytime:</p>
+      <div class="contact-row">📞 <a href="tel:+256705221604" style="color:#00F5FF;">{{ contact_phone_1 }}</a></div>
+      <div class="contact-row">📞 <a href="tel:+256762899641" style="color:#00F5FF;">{{ contact_phone_2 }}</a></div>
+      <div class="contact-row">✉️ <a href="mailto:{{ contact_email }}" style="color:#00F5FF;">{{ contact_email }}</a></div>
+      <hr class="divider" />
+      <p class="muted" style="font-size:12px;">© 2025 CyberTech Academy · Empowering the Next Generation of Tech Innovators</p>
+    </div>
+  </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body { background:#0A0E1A; color:#fff; font-family:Inter,sans-serif; }
+    .container { max-width:600px; margin:0 auto; padding:40px 20px; }
+    .card { background:#0F1628; border:1px solid rgba(0,245,255,0.2); border-radius:16px; padding:40px; }
+    .cyan { color:#00F5FF; }
+    .muted { color:#8892A4; font-size:14px; }
+    .btn { background:linear-gradient(135deg,#00F5FF,#0080ff); color:#0A0E1A; padding:14px 32px;
+           border-radius:10px; text-decoration:none; font-weight:700; display:inline-block; margin:24px 0; }
+    .divider { border:none; border-top:1px solid rgba(0,245,255,0.1); margin:24px 0; }
+    .zoom-box { background:rgba(0,245,255,0.05); border:1px solid rgba(0,245,255,0.2);
+                border-radius:10px; padding:20px; margin:16px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div style="font-size:22px;font-weight:900;letter-spacing:2px;margin-bottom:24px;">Cyber<span class="cyan">Tech</span> Academy</div>
+      <h2>✅ Zoom Access Confirmed!</h2>
+      <p class="muted">Payment successful. Here is your Zoom session link.</p>
+      <hr class="divider" />
+      <p style="color:#ccc;">Hi <strong>{{ user.first_name }}</strong>, you are registered for:</p>
+      <div class="zoom-box">
+        <p style="font-size:18px;font-weight:700;margin:0 0 8px;" class="cyan">{{ session.title }}</p>
+        <p class="muted">📅 {{ session.scheduled_at|date:"l, d F Y" }}</p>
+        <p class="muted">🕐 {{ session.scheduled_at|date:"H:i" }} EAT</p>
+        <p class="muted">⏱ {{ session.duration_minutes }} minutes</p>
+      </div>
+      <a href="{{ session.zoom_link }}" class="btn">🎥 Join Zoom Session</a>
+      <hr class="divider" />
+      <p class="muted">Questions? Contact us:<br />
+        📞 {{ contact_phone_1 }}<br />
+        ✉️ {{ contact_email }}
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+

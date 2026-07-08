@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}Pay Admission Fee{% endblock %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center px-4 py-20">
+  <div class="max-w-md w-full fade-in">
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 bg-cyan-400/10 rounded-2xl border border-cyan-400/20 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-graduation-cap text-cyan-400 text-2xl"></i>
+      </div>
+      <h1 class="font-display text-3xl font-bold text-white mb-2">
+        Admission <span class="text-cyan">Fee Payment</span>
+      </h1>
+      <p class="text-cyber-muted text-sm">Pay your one-time admission fee to activate your account.</p>
+    </div>
+
+    <!-- Fee Card -->
+    <div class="glass-card rounded-2xl p-6 mb-5">
+
+      <!-- Fee Summary -->
+      <div class="flex items-center justify-between mb-5 pb-4 border-b border-cyber-border">
+        <div>
+          <p class="text-white font-semibold">CyberTech Academy</p>
+          <p class="text-cyber-muted text-xs">One-time Admission Fee</p>
+        </div>
+        <div class="text-right">
+          <p class="text-3xl font-bold font-display text-cyan-400">20,000</p>
+          <p class="text-cyber-muted text-xs">UGX</p>
+        </div>
+      </div>
+
+      <!-- What you get -->
+      <ul class="space-y-2 text-sm text-cyber-muted mb-6">
+        <li class="flex items-center gap-2"><i class="fas fa-check text-green-400 text-xs w-4"></i> Full platform access</li>
+        <li class="flex items-center gap-2"><i class="fas fa-check text-green-400 text-xs w-4"></i> Enroll in any course</li>
+        <li class="flex items-center gap-2"><i class="fas fa-check text-green-400 text-xs w-4"></i> Book live Zoom sessions</li>
+        <li class="flex items-center gap-2"><i class="fas fa-check text-green-400 text-xs w-4"></i> Student dashboard & progress tracking</li>
+        <li class="flex items-center gap-2"><i class="fas fa-check text-green-400 text-xs w-4"></i> Paid once — never recurring</li>
+      </ul>
+
+      <!-- Error Message -->
+      {% if error %}
+      <div class="bg-red-900/30 border border-red-500/40 rounded-xl p-4 mb-5">
+        <p class="text-red-400 text-sm flex items-start gap-2">
+          <i class="fas fa-triangle-exclamation mt-0.5 flex-shrink-0"></i>
+          {{ error }}
+        </p>
+      </div>
+      {% endif %}
+
+      <!-- ── FORM ─────────────────────────────────────────── -->
+      <!--
+        NOTE: @ensure_csrf_cookie is set on this view so Django
+        always sets the CSRF cookie when you land here from an
+        email link. The {% csrf_token %} tag below reads that
+        cookie and embeds the token in the hidden input.
+      -->
+      <form method="POST" action="{% url 'students:admission_pay' %}" id="admissionForm">
+        {% csrf_token %}
+        <div class="mb-5">
+          <label class="block text-cyber-muted text-sm mb-1.5">
+            Your Email Address <span class="text-red-400">*</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            value="{{ email }}"
+            required
+            autocomplete="email"
+            class="form-input"
+            placeholder="Enter the email you registered with"
+          />
+          <p class="text-cyber-muted text-xs mt-1.5">
+            <i class="fas fa-info-circle mr-1 text-cyan-400/60"></i>
+            Use the same email you registered with. We'll verify your admission status.
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          class="btn-primary w-full py-3.5 rounded-xl font-semibold flex items-center justify-center gap-2"
+        >
+          <i class="fas fa-lock"></i> Pay UGX 20,000 via Flutterwave
+        </button>
+      </form>
+    </div>
+
+    <!-- Security note -->
+    <div class="flex items-center justify-center gap-3 text-cyber-muted text-xs mb-4">
+      <i class="fas fa-shield-halved text-green-400"></i>
+      <span>Secured by Flutterwave · 256-bit SSL Encryption</span>
+    </div>
+
+    <p class="text-center text-cyber-muted text-xs">
+      Not admitted yet?
+      <a href="{% url 'students:admission_pending' %}" class="text-cyan-400 hover:underline">Check application status</a>
+      &nbsp;·&nbsp; Need help?
+      <a href="tel:+256705221604" class="text-cyan-400 hover:underline">+256 705 221 604</a>
+    </p>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  /**
+   * CSRF safety net:
+   * If the page was cached or served stale, the hidden CSRF input
+   * may be empty. This script detects that and reloads the page
+   * once to get a fresh token before the user submits.
+   */
+  (function () {
+    var form  = document.getElementById('admissionForm');
+    var token = form.querySelector('[name=csrfmiddlewaretoken]');
+    if (token && !token.value) {
+      // Token is blank — reload to get a fresh one
+      window.location.reload(true);
+    }
+  })();
+</script>
+{% endblock %}

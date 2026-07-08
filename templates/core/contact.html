@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+<section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+  <!-- Header -->
+  <div class="text-center mb-12 fade-in">
+    <div class="inline-flex items-center gap-2 badge-cyan px-4 py-1.5 rounded-full text-sm mb-4">
+      <i class="fas fa-headset"></i> We're here to help
+    </div>
+    <h1 class="font-display text-4xl font-bold text-white mb-3">
+      Get In <span class="text-cyan neon-text">Touch</span>
+    </h1>
+    <p class="text-cyber-muted max-w-lg mx-auto">Have questions about courses, payments, or sessions? We respond within 24 hours.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+    <!-- Contact Form -->
+    <div class="glass-card rounded-2xl p-8 fade-in">
+      <h2 class="font-display font-bold text-white text-lg mb-6 flex items-center gap-2">
+        <i class="fas fa-paper-plane text-cyan-400"></i> Send a Message
+      </h2>
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-cyber-muted text-sm mb-1.5">Full Name</label>
+            <input type="text" name="name" required class="form-input" placeholder="Your full name" />
+          </div>
+          <div>
+            <label class="block text-cyber-muted text-sm mb-1.5">Email Address</label>
+            <input type="email" name="email" required class="form-input" placeholder="you@example.com" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-cyber-muted text-sm mb-1.5">Phone Number</label>
+          <input type="tel" name="phone" class="form-input" placeholder="+256 700 000 000" />
+        </div>
+        <div>
+          <label class="block text-cyber-muted text-sm mb-1.5">Subject</label>
+          <select name="subject" class="form-input">
+            <option value="">— Select a subject —</option>
+            <option value="course">Course Inquiry</option>
+            <option value="zoom">Zoom Session Booking</option>
+            <option value="payment">Payment Issue</option>
+            <option value="technical">Technical Support</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-cyber-muted text-sm mb-1.5">Message</label>
+          <textarea name="message" rows="5" required class="form-input resize-none"
+            placeholder="Tell us how we can help you..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+      </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="space-y-6 fade-in">
+      <!-- Info Cards -->
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-display font-bold text-white text-base mb-5 flex items-center gap-2">
+          <i class="fas fa-address-book text-cyan-400"></i> Contact Information
+        </h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-cyan-400/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-phone text-cyan-400"></i>
+            </div>
+            <div>
+              <p class="text-white text-sm font-medium mb-0.5">Phone Numbers</p>
+              <a href="tel:+256705221604" class="text-cyber-muted text-sm hover:text-cyan-400 transition-colors block">+256 705 221 604</a><button onclick="navigator.clipboard.writeText('+256705221604'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000)" class="text-xs text-cyan-400/60 hover:text-cyan-400 transition-colors mt-0.5 block">Copy</button>
+              <a href="tel:+256762899641" class="text-cyber-muted text-sm hover:text-cyan-400 transition-colors block">+256 762 899 641</a><button onclick="navigator.clipboard.writeText('+256762899641'); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000)" class="text-xs text-cyan-400/60 hover:text-cyan-400 transition-colors mt-0.5 block">Copy</button>
+            </div>
+          </div>
+          <div class="border-t border-cyber-border"></div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-green-400/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-envelope text-green-400"></i>
+            </div>
+            <div>
+              <p class="text-white text-sm font-medium mb-0.5">Email Address</p>
+              <a href="https://mail.google.com/mail/?view=cm&to=cyberkarts41@gmail.com" target="_blank" class="text-cyber-muted text-sm hover:text-green-400 transition-colors">cyberkarts41@gmail.com</a>
+            </div>
+          </div>
+          <div class="border-t border-cyber-border"></div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-purple-400/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-clock text-purple-400"></i>
+            </div>
+            <div>
+              <p class="text-white text-sm font-medium mb-0.5">Response Time</p>
+              <p class="text-cyber-muted text-sm">Within 24 hours on business days</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="font-display font-bold text-white text-base mb-4 flex items-center gap-2">
+          <i class="fas fa-bolt text-yellow-400"></i> Quick Actions
+        </h3>
+        <div class="space-y-3">
+          <a href="https://wa.me/256705221604" target="_blank"
+            class="flex items-center gap-3 bg-green-900/20 border border-green-500/20 rounded-xl p-4 hover:border-green-500/40 transition-colors">
+            <i class="fab fa-whatsapp text-green-400 text-xl"></i>
+            <div>
+              <p class="text-white text-sm font-medium">WhatsApp Chat</p>
+              <p class="text-cyber-muted text-xs">+256 705 221 604</p>
+            </div>
+            <i class="fas fa-arrow-right text-cyber-muted text-xs ml-auto"></i>
+          </a>
+          <a href="/register/" class="flex items-center gap-3 glass-card rounded-xl p-4 hover:border-cyan-400/40 transition-colors">
+            <i class="fas fa-graduation-cap text-cyan-400 text-xl"></i>
+            <div>
+              <p class="text-white text-sm font-medium">Register Now</p>
+              <p class="text-cyber-muted text-xs">Create your free student account</p>
+            </div>
+            <i class="fas fa-arrow-right text-cyber-muted text-xs ml-auto"></i>
+          </a>
+          <a href="/sessions/" class="flex items-center gap-3 glass-card rounded-xl p-4 hover:border-purple-400/40 transition-colors">
+            <i class="fas fa-video text-purple-400 text-xl"></i>
+            <div>
+              <p class="text-white text-sm font-medium">Book a Live Session</p>
+              <p class="text-cyber-muted text-xs">Join our next Zoom class</p>
+            </div>
+            <i class="fas fa-arrow-right text-cyber-muted text-xs ml-auto"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
