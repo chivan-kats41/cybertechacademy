@@ -10,7 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-producti
 
 DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*', 'cybertechacademy.pythonanywhere.com').split(',')
 
 # ─── APPLICATIONS ───────────────────────────────────────────
 DJANGO_APPS = [
@@ -142,12 +142,12 @@ EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'CyberTech Academy <chivankats@gmail.com>')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'CyberTech Academy <cyberkarts41@gmail.com>')
 
 # ─── CONTACT DETAILS ─────────────────────────────────────────
 CONTACT_PHONE_1 = '+256 705 221 604'
 CONTACT_PHONE_2 = '+256 762 899 641'
-CONTACT_EMAIL = 'chivankats@gmail.com'
+CONTACT_EMAIL = 'cyberkarts41@gmail.com'
 
 # ─── PAYMENT GATEWAYS ────────────────────────────────────────
 FLUTTERWAVE_PUBLIC_KEY = os.environ.get('FLUTTERWAVE_PUBLIC_KEY', '')
@@ -171,7 +171,7 @@ JAZZMIN_SETTINGS = {
         {"name": "View Site", "url": "/", "new_window": True},
     ],
     "usermenu_links": [
-        {"name": "Support", "url": "mailto:chivankats@gmail.com", "new_window": True},
+        {"name": "Support", "url": "mailto:cyberkarts41@gmail.com", "new_window": True},
     ],
     "show_sidebar": True,
     "navigation_expanded": True,
@@ -191,7 +191,7 @@ JAZZMIN_SETTINGS = {
     "use_google_fonts_cdn": True,
     "show_ui_builder": False,
     "changeform_format": "horizontal_tabs",
-    "language_chooser": False,
+    "language_chooser": True,
 }
 
 JAZZMIN_UI_TWEAKS = {

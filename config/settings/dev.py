@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'cybertechacademy.pythonanywhere.com']
 
 # SQLite for local dev
 DATABASES = {
@@ -31,6 +31,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost',
     'http://127.0.0.1',
+    'htpp://cybertechacademy.pythonanywhere.com'
 ]
 
 # Ensure session and CSRF cookies work correctly in dev
