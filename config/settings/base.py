@@ -155,7 +155,9 @@ FLUTTERWAVE_SECRET_KEY = os.environ.get('FLUTTERWAVE_SECRET_KEY', '')
 FLUTTERWAVE_ENCRYPTION_KEY = os.environ.get('FLUTTERWAVE_ENCRYPTION_KEY', '')
 
 # ─── CORS ────────────────────────────────────────────────────
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
+CORS_ALLOWED_ORIGINS = [
+    "https://Cybertechacademy.pythonanywhere.com",
+]
 
 # ─── JAZZMIN ADMIN UI ─────────────────────────────────────────
 JAZZMIN_SETTINGS = {
